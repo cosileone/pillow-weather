@@ -1,12 +1,16 @@
 <template>
-  <form @submit.prevent="">
-    <select v-model="searchMode">
+  <form @submit.prevent="submitForm">
+    <select :value="searchMode" @input="setSearchMode($event.target.value)">
       <option value="" disabled selected>Search by</option>
       <option value="name">Name</option>
       <option value="coordinates">Coordinates</option>
       <option value="zipcode" disabled>Zip Code</option>
     </select>
-    <input v-model="q" type="text" placeholder="Search for a city">
+    <template v-if="searchMode === 'coordinates'">
+      <input :value="location.latitude" type="text" placeholder="Latitude">
+      <input :value="location.longitude" type="text" placeholder="Longitude">
+    </template>
+    <input v-else v-model="q" type="text" placeholder="Search for a city">
     <button type="submit">Search</button>
     <p>
       <em>(Search by city name, zipcode, or longitude & latitude coordinates.)</em>
@@ -15,24 +19,43 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'SearchBar',
   data() {
     return {
-      searchMode: '',
       q: null,
     };
   },
-  methods: {
-    ...mapActions([
-      'setUserLocation',
-      'fetchWeatherData',
+  computed: {
+    ...mapState([
+      'searchMode',
+      'location',
     ]),
   },
+  methods: {
+    ...mapActions([
+      'setSearchMode',
+      'setLocation',
+      'fetchWeatherData',
+    ]),
+    submitForm() {
+      let params = {};
+      if (this.searchMode === 'coordinates') {
+        params = {
+          lat: this.location.latitude,
+          lon: this.location.longitude,
+        };
+      } else {
+        params = { q: this.q };
+      }
+
+      this.fetchWeatherData(params);
+    },
+  },
   created() {
-    this.setUserLocation();
+    this.setLocation();
   },
 };
 </script>

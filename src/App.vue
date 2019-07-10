@@ -2,16 +2,19 @@
   <div id="app">
     <!--<img alt="Vue logo" src="./assets/logo.png">-->
     <SearchBar />
+    <WeatherCharts v-if="$store.state.weatherData"></WeatherCharts>
   </div>
 </template>
 
 <script>
 import SearchBar from './components/SearchBar.vue';
+import WeatherCharts from './components/WeatherCharts.vue';
 
 export default {
   name: 'app',
   components: {
     SearchBar,
+    WeatherCharts,
   },
 };
 </script>
