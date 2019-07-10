@@ -100,15 +100,20 @@ export default {
         ],
       };
     },
+    createCharts() {
+      this.preferredData.forEach((key) => {
+        // eslint-disable-next-line
+        new Chartist.Line(`#chartist-${key}`, this.createData(key));
+      });
+    },
+  },
+  mounted() {
+    if (this.weatherData) {
+      this.createCharts();
+    }
   },
   updated() {
-    // const data = this.createData();
-    // console.log(data);
-    // new Chartist.Line('#chartist', data);
-    this.preferredData.forEach((key) => {
-      // eslint-disable-next-line
-      new Chartist.Line(`#chartist-${key}`, this.createData(key));
-    });
+    this.createCharts();
   },
 };
 </script>
