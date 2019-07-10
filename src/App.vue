@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <!--<img alt="Vue logo" src="./assets/logo.png">-->
+    <SearchBar />
   </div>
 </template>
 
 <script>
+import SearchBar from './components/SearchBar.vue';
+
 export default {
   name: 'app',
-  components: {},
+  components: {
+    SearchBar,
+  },
 };
 </script>
 
